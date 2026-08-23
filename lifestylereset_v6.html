@@ -175,26 +175,6 @@ main{padding:0 1.5rem;}
 .entry > *{position:relative; z-index:1;}
 @media (max-width:700px){.entry::before{font-size:5.5rem; top:-1.4rem;}}
 
-/* ---------- custom cursor ---------- */
-.cursor-dot,.cursor-ring{
-  position:fixed;
-  top:0; left:0;
-  border-radius:50%;
-  pointer-events:none;
-  z-index:60;
-  transform:translate(-50%,-50%);
-  mix-blend-mode:difference;
-}
-.cursor-dot{width:6px; height:6px; background:#fff;}
-.cursor-ring{
-  width:34px; height:34px;
-  border:1px solid #fff;
-  transition:width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
-  opacity:0.9;
-}
-.cursor-ring.hover{width:56px; height:56px;}
-body.has-custom-cursor,body.has-custom-cursor a,body.has-custom-cursor .col,body.has-custom-cursor .phase,body.has-custom-cursor .day-timeline,body.has-custom-cursor .checklist{cursor:none;}
-
 /* ---------- scroll progress spine ---------- */
 .scroll-spine{
   position:fixed;
@@ -249,43 +229,14 @@ body.has-custom-cursor,body.has-custom-cursor a,body.has-custom-cursor .col,body
 .trow .weeks{font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-faint); text-align:right; font-variant-numeric:tabular-nums;}
 .timeline-foot{font-size:0.85rem; color:var(--ink-faint); margin-top:1.3rem; padding-top:1.2rem; border-top:1px solid var(--line);}
 
-/* ---------- phase slide track ---------- */
-.phase-track{
-  display:flex;
-  gap:1.1rem;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  scroll-padding-left:1px;
-  margin:0 -1.5rem;
-  padding:0.3rem 1.5rem 1.4rem;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
-}
-.phase-track::-webkit-scrollbar{display:none;}
-.phase{
-  flex:0 0 min(560px, 88vw);
-  scroll-snap-align:start;
-  border:1px solid var(--line);
-  border-radius:6px;
-  padding:1.6rem 1.7rem 1.8rem;
-  background:var(--bg-raised);
-  position:relative;
-}
+/* ---------- phase log entries ---------- */
+.phase{border-left:2px solid var(--line); padding-left:1.6rem; margin-bottom:2.4rem; position:relative;}
 .phase::before{
   content:'';
-  position:absolute; left:1.7rem; top:0;
-  width:26px; height:2px;
-  background:var(--ink);
+  position:absolute; left:-5px; top:0.4rem;
+  width:8px; height:8px; border-radius:50%;
+  background:var(--accent);
 }
-.phase-dots{display:flex; justify-content:center; gap:0.5rem; margin-top:0.6rem;}
-.pdot{
-  width:7px; height:7px; border-radius:50%;
-  border:1px solid var(--ink-faint);
-  background:transparent;
-  padding:0; cursor:pointer;
-  transition:background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
-}
-.pdot.active{background:var(--ink); border-color:var(--ink); transform:scale(1.3);}
 .phase-head{display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:0.3rem;}
 .phase-head h3{font-family:var(--font-display); font-weight:600; font-size:1.4rem; margin:0; color:var(--ink);}
 .phase-head .weeks-tag{font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.04em; color:var(--sunrise); white-space:nowrap;}
@@ -356,32 +307,10 @@ body.has-custom-cursor,body.has-custom-cursor a,body.has-custom-cursor .col,body
 @media (max-width:560px){.drow{grid-template-columns:58px 1fr;}}
 
 /* ---------- checklist ---------- */
-.checklist-progress{display:flex; align-items:center; gap:0.7rem; margin-bottom:0.9rem; font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-faint);}
-.checklist-progress .ptrack{flex:1; height:4px; background:var(--accent-soft); border-radius:2px; overflow:hidden;}
-.checklist-progress .pfill{height:100%; width:0%; background:var(--ink); transition:width 0.4s cubic-bezier(.22,1,.36,1);}
 .checklist{border:1px solid var(--line); border-radius:4px; background:var(--bg-raised); overflow:hidden;}
-.crow{
-  display:grid; grid-template-columns:22px 1fr auto; gap:1rem; align-items:center;
-  padding:0.9rem 1.4rem; border-top:1px solid var(--line);
-  width:100%; background:none; border-left:none; border-right:none; border-bottom:none;
-  font:inherit; text-align:left; cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-}
+.crow{display:grid; grid-template-columns:1fr auto; gap:1rem; align-items:center; padding:0.9rem 1.4rem; border-top:1px solid var(--line);}
 .crow:first-child{border-top:none;}
-.crow .box{
-  width:16px; height:16px; border-radius:4px; border:1.4px solid var(--ink-faint);
-  position:relative; transition:background 0.2s ease, border-color 0.2s ease;
-}
-.crow .box::after{
-  content:'';
-  position:absolute; left:3px; top:-1px; width:4px; height:8px;
-  border:solid #fff; border-width:0 2px 2px 0; transform:rotate(40deg) scale(0);
-  transition:transform 0.2s ease;
-}
-.crow.done .box{background:var(--ink); border-color:var(--ink);}
-.crow.done .box::after{transform:rotate(40deg) scale(1);}
-.crow .name{font-size:0.94rem; color:var(--ink); transition:color 0.2s ease;}
-.crow.done .name{color:var(--ink-faint); text-decoration:line-through; text-decoration-color:var(--ink-faint);}
+.crow .name{font-size:0.94rem; color:var(--ink);}
 .crow .freq{font-family:var(--font-mono); font-size:0.7rem; color:var(--ink-faint); white-space:nowrap;}
 
 footer{margin-top:4.5rem; padding-top:1.7rem; border-top:1px solid var(--line); font-size:0.85rem; color:var(--ink-faint);}
@@ -394,8 +323,6 @@ footer{margin-top:4.5rem; padding-top:1.7rem; border-top:1px solid var(--line); 
 </style>
 
 <div class="scroll-spine" id="scrollSpine"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<div class="cursor-dot" id="cursorDot"></div>
 <div class="shell">
   <aside class="rail" aria-hidden="true">
     <span class="mark">Nhịp Ngày Mới</span>
@@ -407,7 +334,7 @@ footer{margin-top:4.5rem; padding-top:1.7rem; border-top:1px solid var(--line); 
 
   <main>
     <section class="hero">
-      <span class="hero-ghost" id="heroGhost" aria-hidden="true">0</span>
+      <span class="hero-ghost" aria-hidden="true">12</span>
       <div class="hero-inner">
         <p class="eyebrow">Nhật ký tái thiết lập · 12 tuần</p>
         <h1 class="hero-h1">
@@ -441,47 +368,39 @@ footer{margin-top:4.5rem; padding-top:1.7rem; border-top:1px solid var(--line); 
 
       <section class="entry" data-num="02">
         <div class="entry-head"><span class="num">02</span><h2>Ba giai đoạn</h2></div>
-        <p class="entry-note">Mỗi giai đoạn có một mục tiêu duy nhất. Vuốt hoặc bấm chấm để chuyển — đừng cố làm giai đoạn 3 khi còn đang ở giai đoạn 1.</p>
+        <p class="entry-note">Mỗi giai đoạn có một mục tiêu duy nhất. Đừng cố làm giai đoạn 3 khi còn đang ở giai đoạn 1.</p>
 
-        <div class="phase-track" id="phaseTrack">
-          <div class="phase">
-            <div class="phase-head"><h3>Tái lập nhịp</h3><span class="weeks-tag">TUẦN 1–3</span></div>
-            <p class="phase-goal">Mục tiêu duy nhất: giờ ngủ và giờ thức cố định mỗi ngày, kể cả cuối tuần.</p>
-            <div class="phase-body">
-              <div class="item"><span class="dot"></span><div class="txt"><strong>Giờ ngủ – giờ dậy cố định</strong><span>Sai lệch không quá 30 phút mỗi ngày, kể cả khi mất ngủ — vẫn dậy đúng giờ.</span></div></div>
-              <div class="item"><span class="dot"></span><div class="txt"><strong>Ánh sáng buổi sáng</strong><span>10–15 phút ra ngoài trời trong vòng 1 giờ sau khi dậy.</span></div></div>
-              <div class="item"><span class="dot"></span><div class="txt"><strong>Vận động nhẹ</strong><span>Đi bộ nhanh hoặc cường độ thấp 20–30 phút, 4–5 lần/tuần.</span></div></div>
-              <div class="item"><span class="dot"></span><div class="txt"><strong>Bữa ăn đều giờ</strong><span>Cố định 3 khung giờ ăn, ưu tiên đủ protein hơn là kiêng khem chặt.</span></div></div>
-              <div class="watch"><span class="tag">Lưu ý</span><span>2 tuần đầu thường khó chịu nhất — mệt mỏi hơn dự kiến trước khi thấy lợi ích. Đây là tái thích nghi bình thường.</span></div>
-            </div>
-          </div>
-
-          <div class="phase">
-            <div class="phase-head"><h3>Xây dựng</h3><span class="weeks-tag">TUẦN 4–6</span></div>
-            <p class="phase-goal">Mục tiêu duy nhất: đưa cường độ tập luyện lên mức thật, giữ nguyên nền nhịp sinh học đã ổn định.</p>
-            <div class="phase-body">
-              <div class="item"><span class="dot"></span><div class="txt"><strong>Tập kháng lực có cấu trúc</strong><span>3–4 buổi/tuần, tăng khối lượng khoảng 5–10% mỗi tuần.</span></div></div>
-              <div class="item"><span class="dot"></span><div class="txt"><strong>Giấc ngủ sâu là ưu tiên</strong><span>Tắt màn hình trước ngủ 45–60 phút — não bộ củng cố trí nhớ ở giai đoạn này.</span></div></div>
-              <div class="item"><span class="dot"></span><div class="txt"><strong>Siết lại dinh dưỡng</strong><span>Bắt đầu tính calo/macro nếu mục tiêu là giảm mỡ.</span></div></div>
-              <div class="item"><span class="dot"></span><div class="txt"><strong>Phiên làm việc sâu</strong><span>45–90 phút không gián đoạn — khả năng chú ý bắt đầu kéo dài trở lại.</span></div></div>
-            </div>
-          </div>
-
-          <div class="phase">
-            <div class="phase-head"><h3>Ổn định</h3><span class="weeks-tag">TUẦN 7–12</span></div>
-            <p class="phase-goal">Mục tiêu duy nhất: biến nếp sống thành mặc định, không cần ý chí để duy trì.</p>
-            <div class="phase-body">
-              <div class="item"><span class="dot"></span><div class="txt"><strong>Đánh giá lại mỗi 2 tuần</strong><span>Số đo, ảnh, chỉ số tập — điều chỉnh thay vì đoán mò.</span></div></div>
-              <div class="item"><span class="dot"></span><div class="txt"><strong>Thêm một biến số mới</strong><span>Môn thể thao mới, kỹ năng, hoặc mục tiêu xã hội gắn với nếp sống.</span></div></div>
-              <div class="item"><span class="dot"></span><div class="txt"><strong>Chuẩn bị cho gián đoạn</strong><span>Lên kế hoạch trước cho du lịch, ốm, deadline.</span></div></div>
-            </div>
+        <div class="phase">
+          <div class="phase-head"><h3>Tái lập nhịp</h3><span class="weeks-tag">TUẦN 1–3</span></div>
+          <p class="phase-goal">Mục tiêu duy nhất: giờ ngủ và giờ thức cố định mỗi ngày, kể cả cuối tuần.</p>
+          <div class="phase-body">
+            <div class="item"><span class="dot"></span><div class="txt"><strong>Giờ ngủ – giờ dậy cố định</strong><span>Sai lệch không quá 30 phút mỗi ngày, kể cả khi mất ngủ — vẫn dậy đúng giờ.</span></div></div>
+            <div class="item"><span class="dot"></span><div class="txt"><strong>Ánh sáng buổi sáng</strong><span>10–15 phút ra ngoài trời trong vòng 1 giờ sau khi dậy.</span></div></div>
+            <div class="item"><span class="dot"></span><div class="txt"><strong>Vận động nhẹ</strong><span>Đi bộ nhanh hoặc cường độ thấp 20–30 phút, 4–5 lần/tuần.</span></div></div>
+            <div class="item"><span class="dot"></span><div class="txt"><strong>Bữa ăn đều giờ</strong><span>Cố định 3 khung giờ ăn, ưu tiên đủ protein hơn là kiêng khem chặt.</span></div></div>
+            <div class="watch"><span class="tag">Lưu ý</span><span>2 tuần đầu thường khó chịu nhất — mệt mỏi hơn dự kiến trước khi thấy lợi ích. Đây là tái thích nghi bình thường.</span></div>
           </div>
         </div>
 
-        <div class="phase-dots" id="phaseDots">
-          <button class="pdot active" data-i="0" aria-label="Giai đoạn 1"></button>
-          <button class="pdot" data-i="1" aria-label="Giai đoạn 2"></button>
-          <button class="pdot" data-i="2" aria-label="Giai đoạn 3"></button>
+        <div class="phase">
+          <div class="phase-head"><h3>Xây dựng</h3><span class="weeks-tag">TUẦN 4–6</span></div>
+          <p class="phase-goal">Mục tiêu duy nhất: đưa cường độ tập luyện lên mức thật, giữ nguyên nền nhịp sinh học đã ổn định.</p>
+          <div class="phase-body">
+            <div class="item"><span class="dot"></span><div class="txt"><strong>Tập kháng lực có cấu trúc</strong><span>3–4 buổi/tuần, tăng khối lượng khoảng 5–10% mỗi tuần.</span></div></div>
+            <div class="item"><span class="dot"></span><div class="txt"><strong>Giấc ngủ sâu là ưu tiên</strong><span>Tắt màn hình trước ngủ 45–60 phút — não bộ củng cố trí nhớ ở giai đoạn này.</span></div></div>
+            <div class="item"><span class="dot"></span><div class="txt"><strong>Siết lại dinh dưỡng</strong><span>Bắt đầu tính calo/macro nếu mục tiêu là giảm mỡ.</span></div></div>
+            <div class="item"><span class="dot"></span><div class="txt"><strong>Phiên làm việc sâu</strong><span>45–90 phút không gián đoạn — khả năng chú ý bắt đầu kéo dài trở lại.</span></div></div>
+          </div>
+        </div>
+
+        <div class="phase">
+          <div class="phase-head"><h3>Ổn định</h3><span class="weeks-tag">TUẦN 7–12</span></div>
+          <p class="phase-goal">Mục tiêu duy nhất: biến nếp sống thành mặc định, không cần ý chí để duy trì.</p>
+          <div class="phase-body">
+            <div class="item"><span class="dot"></span><div class="txt"><strong>Đánh giá lại mỗi 2 tuần</strong><span>Số đo, ảnh, chỉ số tập — điều chỉnh thay vì đoán mò.</span></div></div>
+            <div class="item"><span class="dot"></span><div class="txt"><strong>Thêm một biến số mới</strong><span>Môn thể thao mới, kỹ năng, hoặc mục tiêu xã hội gắn với nếp sống.</span></div></div>
+            <div class="item"><span class="dot"></span><div class="txt"><strong>Chuẩn bị cho gián đoạn</strong><span>Lên kế hoạch trước cho du lịch, ốm, deadline.</span></div></div>
+          </div>
         </div>
       </section>
 
@@ -595,17 +514,13 @@ footer{margin-top:4.5rem; padding-top:1.7rem; border-top:1px solid var(--line); 
 
       <section class="entry" data-num="08">
         <div class="entry-head"><span class="num">08</span><h2>Việc theo dõi</h2></div>
-        <p class="entry-note">Giữ danh sách ngắn — nhiều chỉ số hơn thường nghĩa là bỏ cuộc sớm hơn. Bấm để đánh dấu đã làm hôm nay.</p>
-        <div class="checklist-progress">
-          <span id="checklistCount">0/5</span>
-          <span class="ptrack"><span class="pfill" id="checklistFill"></span></span>
-        </div>
-        <div class="checklist" id="checklistBox">
-          <button type="button" class="crow"><span class="box"></span><span class="name">Giờ ngủ – giờ dậy</span><span class="freq">HÀNG NGÀY</span></button>
-          <button type="button" class="crow"><span class="box"></span><span class="name">Buổi tập (loại + thời lượng)</span><span class="freq">HÀNG NGÀY</span></button>
-          <button type="button" class="crow"><span class="box"></span><span class="name">Cân nặng buổi sáng</span><span class="freq">2–3 LẦN/TUẦN</span></button>
-          <button type="button" class="crow"><span class="box"></span><span class="name">Ảnh chụp vóc dáng</span><span class="freq">MỖI 2 TUẦN</span></button>
-          <button type="button" class="crow"><span class="box"></span><span class="name">Năng lượng &amp; tập trung (1–10)</span><span class="freq">CUỐI TUẦN</span></button>
+        <p class="entry-note">Giữ danh sách ngắn — nhiều chỉ số hơn thường nghĩa là bỏ cuộc sớm hơn.</p>
+        <div class="checklist">
+          <div class="crow"><span class="name">Giờ ngủ – giờ dậy</span><span class="freq">HÀNG NGÀY</span></div>
+          <div class="crow"><span class="name">Buổi tập (loại + thời lượng)</span><span class="freq">HÀNG NGÀY</span></div>
+          <div class="crow"><span class="name">Cân nặng buổi sáng</span><span class="freq">2–3 LẦN/TUẦN</span></div>
+          <div class="crow"><span class="name">Ảnh chụp vóc dáng</span><span class="freq">MỖI 2 TUẦN</span></div>
+          <div class="crow"><span class="name">Năng lượng &amp; tập trung (1–10)</span><span class="freq">CUỐI TUẦN</span></div>
         </div>
       </section>
 
@@ -690,101 +605,5 @@ if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').mat
       card.style.transform = '';
     });
   });
-}
-
-/* interactive checklist */
-(function () {
-  var box = document.getElementById('checklistBox');
-  if (!box) return;
-  var rows = box.querySelectorAll('.crow');
-  var countEl = document.getElementById('checklistCount');
-  var fillEl = document.getElementById('checklistFill');
-  function refresh() {
-    var done = box.querySelectorAll('.crow.done').length;
-    countEl.textContent = done + '/' + rows.length;
-    fillEl.style.width = (done / rows.length * 100) + '%';
-  }
-  rows.forEach(function (row) {
-    row.addEventListener('click', function () {
-      row.classList.toggle('done');
-      refresh();
-    });
-  });
-  refresh();
-})();
-
-/* phase slide track + dots */
-(function () {
-  var track = document.getElementById('phaseTrack');
-  var dots = document.querySelectorAll('#phaseDots .pdot');
-  if (!track || !dots.length) return;
-  var cards = track.querySelectorAll('.phase');
-  dots.forEach(function (dot) {
-    dot.addEventListener('click', function () {
-      var i = parseInt(dot.getAttribute('data-i'), 10);
-      var card = cards[i];
-      if (card) track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: reduceMotion ? 'auto' : 'smooth' });
-    });
-  });
-  var ticking = false;
-  track.addEventListener('scroll', function () {
-    if (ticking) return;
-    ticking = true;
-    window.requestAnimationFrame(function () {
-      var center = track.scrollLeft + track.clientWidth / 2;
-      var closest = 0, closestDist = Infinity;
-      cards.forEach(function (card, i) {
-        var mid = card.offsetLeft - track.offsetLeft + card.offsetWidth / 2;
-        var d = Math.abs(mid - center);
-        if (d < closestDist) { closestDist = d; closest = i; }
-      });
-      dots.forEach(function (d, i) { d.classList.toggle('active', i === closest); });
-      ticking = false;
-    });
-  }, { passive: true });
-})();
-
-/* count-up hero number */
-(function () {
-  var el = document.getElementById('heroGhost');
-  if (!el) return;
-  if (reduceMotion) { el.textContent = '12'; return; }
-  var start = null;
-  var duration = 1400;
-  function step(ts) {
-    if (start === null) start = ts;
-    var p = Math.min((ts - start) / duration, 1);
-    var eased = 1 - Math.pow(1 - p, 3);
-    el.textContent = Math.round(eased * 12);
-    if (p < 1) window.requestAnimationFrame(step);
-  }
-  window.requestAnimationFrame(step);
-})();
-
-/* custom cursor */
-if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  var ring = document.getElementById('cursorRing');
-  var dot = document.getElementById('cursorDot');
-  if (ring && dot) {
-    document.body.classList.add('has-custom-cursor');
-    var rx = 0, ry = 0, mx = 0, my = 0;
-    window.addEventListener('mousemove', function (e) {
-      mx = e.clientX; my = e.clientY;
-      dot.style.left = mx + 'px';
-      dot.style.top = my + 'px';
-    });
-    function loop() {
-      rx += (mx - rx) * 0.18;
-      ry += (my - ry) * 0.18;
-      ring.style.left = rx + 'px';
-      ring.style.top = ry + 'px';
-      window.requestAnimationFrame(loop);
-    }
-    window.requestAnimationFrame(loop);
-    document.querySelectorAll('.col, .day-timeline, .checklist, .phase, a').forEach(function (el) {
-      el.addEventListener('mouseenter', function () { ring.classList.add('hover'); });
-      el.addEventListener('mouseleave', function () { ring.classList.remove('hover'); });
-    });
-  }
 }
 </script>
