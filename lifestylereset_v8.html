@@ -1,0 +1,790 @@
+<title>Nhịp Ngày Mới</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#ffffff;
+  --bg-raised:#f5f5f3;
+  --ink:#141414;
+  --ink-soft:#59595a;
+  --ink-faint:#9a9a97;
+  --line:#e3e3df;
+  --accent:#141414;
+  --accent-soft:#eeeeeb;
+  --accent-strong:#000000;
+  --sunrise:#a8551f;
+  --sunrise-soft:#f2e5da;
+  --horizon-top:#ffffff;
+  --horizon-bot:#ffffff;
+  --font-display:'Source Serif 4', Georgia, serif;
+  --font-body:'Public Sans', system-ui, sans-serif;
+  --font-mono:'JetBrains Mono', ui-monospace, monospace;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-body);
+  line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--sunrise-soft); color:var(--accent-strong);}
+img,svg{display:block; max-width:100%;}
+
+/* ---------- shell ---------- */
+.shell{
+  display:grid;
+  grid-template-columns:88px minmax(0,1fr);
+  max-width:1180px;
+  margin:0 auto;
+}
+.rail{
+  position:sticky;
+  top:0;
+  align-self:start;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:space-between;
+  padding:2.4rem 0;
+  border-right:1px solid var(--line);
+}
+.rail .mark{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:1.4rem;
+  color:var(--accent);
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  letter-spacing:0.02em;
+}
+.rail .pulse-rail{width:22px; height:120px; opacity:0.7;}
+.rail .foot-num{
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  color:var(--ink-faint);
+  letter-spacing:0.08em;
+}
+@media (max-width:820px){
+  .shell{grid-template-columns:1fr;}
+  .rail{display:none;}
+}
+
+main{padding:0 1.5rem;}
+.wrap{max-width:700px; margin:0 auto; padding:0 0 7rem;}
+
+/* ---------- hero ---------- */
+.hero{
+  position:relative;
+  margin:0 -1.5rem 5.5rem;
+  padding:4.5rem 1.5rem 4rem;
+  overflow:hidden;
+  background:var(--bg);
+  border-bottom:1px solid var(--line);
+  color:var(--ink);
+}
+.hero-ghost{
+  position:absolute;
+  top:-0.28em;
+  right:-0.05em;
+  z-index:1;
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:min(46vw, 34rem);
+  line-height:1;
+  letter-spacing:-0.03em;
+  color:var(--accent-soft);
+  pointer-events:none;
+  user-select:none;
+}
+.hero-inner{max-width:700px; margin:0 auto; position:relative; z-index:2;}
+.hero .eyebrow{
+  font-family:var(--font-mono);
+  font-size:0.72rem;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--sunrise);
+  margin:0 0 1.4rem;
+}
+.hero h1{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:clamp(2.7rem, 8vw, 5.4rem);
+  line-height:1.02;
+  letter-spacing:-0.02em;
+  margin:0 0 1.3rem;
+  text-wrap:balance;
+  color:var(--accent-strong);
+}
+.hero h1 em{color:var(--sunrise); font-style:normal;}
+.hero-h1 .line{display:block; overflow:hidden;}
+.hero-h1 .line-in{display:block; transform:translateY(105%); animation:lineUp 0.9s cubic-bezier(.22,1,.36,1) forwards;}
+.hero-h1 .line:nth-child(1) .line-in{animation-delay:0.15s;}
+.hero-h1 .line:nth-child(2) .line-in{animation-delay:0.32s;}
+@keyframes lineUp{to{transform:translateY(0);}}
+@media (prefers-reduced-motion:reduce){
+  .hero-h1 .line-in{animation:none; transform:translateY(0);}
+}
+.hero p{
+  font-size:1.08rem;
+  color:var(--ink-soft);
+  max-width:52ch;
+  margin:0 0 2.4rem;
+}
+.pulse-wrap{height:64px; opacity:1;}
+.pulse-wrap svg{width:100%; height:100%;}
+.pulse-line{
+  fill:none;
+  stroke:var(--ink);
+  stroke-width:1.3;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+@media (prefers-reduced-motion:no-preference){
+  .pulse-line{
+    stroke-dasharray:620;
+    stroke-dashoffset:620;
+    animation:draw 3.4s ease-out forwards 0.3s;
+  }
+}
+@keyframes draw{to{stroke-dashoffset:0;}}
+
+/* ---------- section scaffolding ---------- */
+.entry{margin-bottom:4.4rem; position:relative;}
+.entry.reveal{opacity:0; transform:translateY(18px); transition:opacity 0.7s ease, transform 0.7s ease;}
+.entry.reveal-in{opacity:1; transform:translateY(0);}
+.entry::before{
+  content:attr(data-num);
+  position:absolute;
+  top:-2.2rem;
+  right:-0.4rem;
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:8.5rem;
+  line-height:1;
+  color:transparent;
+  -webkit-text-stroke:1px var(--line);
+  z-index:0;
+  pointer-events:none;
+  user-select:none;
+}
+.entry > *{position:relative; z-index:1;}
+@media (max-width:700px){.entry::before{font-size:5.5rem; top:-1.4rem;}}
+
+/* ---------- custom cursor ---------- */
+.cursor-dot,.cursor-ring{
+  position:fixed;
+  top:0; left:0;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:60;
+  transform:translate(-50%,-50%);
+  mix-blend-mode:difference;
+}
+.cursor-dot{width:6px; height:6px; background:#fff;}
+.cursor-ring{
+  width:34px; height:34px;
+  border:1px solid #fff;
+  transition:width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
+  opacity:0.9;
+}
+.cursor-ring.hover{width:56px; height:56px;}
+body.has-custom-cursor,body.has-custom-cursor a,body.has-custom-cursor .col,body.has-custom-cursor .phase,body.has-custom-cursor .day-timeline,body.has-custom-cursor .checklist{cursor:none;}
+
+/* ---------- scroll progress spine ---------- */
+.scroll-spine{
+  position:fixed;
+  top:0; left:0;
+  height:2px;
+  width:0%;
+  background:var(--ink);
+  z-index:50;
+  transform-origin:left;
+}
+.entry-head{
+  display:flex;
+  align-items:baseline;
+  gap:0.9rem;
+  margin-bottom:0.5rem;
+}
+.entry-head .num{
+  font-family:var(--font-mono);
+  font-size:0.78rem;
+  color:var(--sunrise);
+  letter-spacing:0.04em;
+}
+.entry-head h2{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:1.85rem;
+  letter-spacing:-0.005em;
+  margin:0;
+  color:var(--ink);
+}
+.entry-note{
+  color:var(--ink-faint);
+  font-size:0.93rem;
+  margin:0 0 1.7rem;
+  max-width:56ch;
+}
+
+.divider{margin:0 0 4.4rem; opacity:0.55;}
+.divider svg{width:100%; height:20px;}
+.divider path{fill:none; stroke:var(--line); stroke-width:1.4;}
+
+/* ---------- recovery timeline ---------- */
+.timeline{display:flex; flex-direction:column; gap:1rem;}
+.trow{display:grid; grid-template-columns:132px 1fr 72px; align-items:center; gap:1rem;}
+.trow .label{font-size:0.9rem; font-weight:600; color:var(--ink);}
+.trow .bar-track{height:9px; background:var(--accent-soft); border-radius:5px; position:relative; overflow:hidden;}
+.trow .bar-fill{position:absolute; inset:0; width:0; background:var(--ink); border-radius:5px; transition:width 1.1s cubic-bezier(.22,1,.36,1);}
+.timeline.in-view .bar-fill{width:var(--w);}
+@media (prefers-reduced-motion:reduce){
+  .trow .bar-fill{transition:none; width:var(--w);}
+}
+.trow .weeks{font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-faint); text-align:right; font-variant-numeric:tabular-nums;}
+.timeline-foot{font-size:0.85rem; color:var(--ink-faint); margin-top:1.3rem; padding-top:1.2rem; border-top:1px solid var(--line);}
+
+/* ---------- phase slide track ---------- */
+.phase-track{
+  display:flex;
+  gap:1.1rem;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scroll-padding-left:1px;
+  margin:0 -1.5rem;
+  padding:0.3rem 1.5rem 1.4rem;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.phase-track::-webkit-scrollbar{display:none;}
+.phase{
+  flex:0 0 min(560px, 88vw);
+  scroll-snap-align:start;
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:1.6rem 1.7rem 1.8rem;
+  background:var(--bg-raised);
+  position:relative;
+}
+.phase::before{
+  content:'';
+  position:absolute; left:1.7rem; top:0;
+  width:26px; height:2px;
+  background:var(--ink);
+}
+.phase-dots{display:flex; justify-content:center; gap:0.5rem; margin-top:0.6rem;}
+.pdot{
+  width:7px; height:7px; border-radius:50%;
+  border:1px solid var(--ink-faint);
+  background:transparent;
+  padding:0; cursor:pointer;
+  transition:background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+.pdot.active{background:var(--ink); border-color:var(--ink); transform:scale(1.3);}
+.phase-head{display:flex; align-items:baseline; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:0.3rem;}
+.phase-head h3{font-family:var(--font-display); font-weight:600; font-size:1.4rem; margin:0; color:var(--ink);}
+.phase-head .weeks-tag{font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.04em; color:var(--sunrise); white-space:nowrap;}
+.phase-goal{font-size:0.92rem; color:var(--ink-soft); margin:0 0 1.1rem;}
+.phase-body{display:grid; gap:0.9rem;}
+.item{display:grid; grid-template-columns:16px 1fr; gap:0.7rem; align-items:start;}
+.item .dot{width:5px; height:5px; border-radius:50%; background:var(--ink-faint); margin-top:0.6rem;}
+.item .txt strong{display:block; font-size:0.95rem; color:var(--ink); font-weight:600; margin-bottom:0.15rem;}
+.item .txt span{font-size:0.88rem; color:var(--ink-soft);}
+.watch{margin-top:0.4rem; padding:0.85rem 1rem; background:var(--sunrise-soft); border-radius:4px; font-size:0.85rem; color:var(--ink); display:flex; gap:0.7rem;}
+.watch .tag{font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--sunrise); white-space:nowrap; padding-top:0.1rem;}
+
+/* ---------- 12-week map ---------- */
+.grid-weeks{display:grid; grid-template-columns:repeat(12,1fr); gap:6px; overflow-x:auto; padding-bottom:4px;}
+.wk{aspect-ratio:1; min-width:34px; border-radius:5px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.72rem; color:var(--ink-faint); opacity:0; transform:scale(0.4); transition:opacity 0.45s ease, transform 0.45s cubic-bezier(.22,1,.36,1);}
+.grid-weeks.in-view .wk{opacity:1; transform:scale(1);}
+.grid-weeks.in-view .wk:nth-child(1){transition-delay:0.02s;}
+.grid-weeks.in-view .wk:nth-child(2){transition-delay:0.06s;}
+.grid-weeks.in-view .wk:nth-child(3){transition-delay:0.10s;}
+.grid-weeks.in-view .wk:nth-child(4){transition-delay:0.14s;}
+.grid-weeks.in-view .wk:nth-child(5){transition-delay:0.18s;}
+.grid-weeks.in-view .wk:nth-child(6){transition-delay:0.22s;}
+.grid-weeks.in-view .wk:nth-child(7){transition-delay:0.26s;}
+.grid-weeks.in-view .wk:nth-child(8){transition-delay:0.30s;}
+.grid-weeks.in-view .wk:nth-child(9){transition-delay:0.34s;}
+.grid-weeks.in-view .wk:nth-child(10){transition-delay:0.38s;}
+.grid-weeks.in-view .wk:nth-child(11){transition-delay:0.42s;}
+.grid-weeks.in-view .wk:nth-child(12){transition-delay:0.46s;}
+@media (prefers-reduced-motion:reduce){
+  .wk{opacity:1; transform:scale(1); transition:none;}
+}
+.wk.p1{background:var(--accent-soft); border-color:var(--accent-soft); color:var(--ink);}
+.wk.p2{background:color-mix(in srgb, var(--ink) 22%, var(--accent-soft)); border-color:transparent; color:var(--ink);}
+.wk.p3{background:var(--ink); border-color:var(--ink); color:#ffffff;}
+.legend{display:flex; gap:1.4rem; margin-top:1rem; font-size:0.82rem; color:var(--ink-soft); flex-wrap:wrap;}
+.legend .sw{display:inline-flex; align-items:center; gap:0.4rem;}
+.legend i{width:10px; height:10px; border-radius:3px; display:inline-block;}
+
+/* ---------- drink / food columns ---------- */
+.cols{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:4px; overflow:hidden;}
+.col{background:var(--bg-raised);}
+.col,.day-timeline,.checklist{transition:transform 0.25s ease, box-shadow 0.25s ease; will-change:transform;}
+@media (hover:hover) and (pointer:fine){
+  .col:hover,.day-timeline:hover,.checklist:hover{box-shadow:0 18px 34px -20px rgba(20,20,20,0.28);}
+}
+@media (prefers-reduced-motion:reduce){
+  .col,.day-timeline,.checklist{transition:none !important; transform:none !important;}
+}
+.col-head{padding:0.9rem 1.2rem; font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase;}
+.col.cut .col-head{color:var(--sunrise); background:var(--sunrise-soft);}
+.col.add .col-head{color:var(--accent); background:var(--accent-soft);}
+.col ul{list-style:none; margin:0; padding:0;}
+.col li{padding:0.85rem 1.2rem; border-top:1px solid var(--line); font-size:0.88rem;}
+.col li:first-child{border-top:none;}
+.col.cut li strong{display:block; color:var(--ink); font-weight:600; margin-bottom:0.2rem; text-decoration:line-through; text-decoration-color:var(--sunrise); text-decoration-thickness:1.5px;}
+.col.add li strong{display:block; color:var(--ink); font-weight:600; margin-bottom:0.2rem;}
+.col li span{color:var(--ink-soft); font-size:0.84rem;}
+.col.add li .when{display:inline-block; margin-top:0.35rem; font-family:var(--font-mono); font-size:0.68rem; color:var(--accent-strong); background:var(--accent-soft); padding:0.15rem 0.5rem; border-radius:3px;}
+@media (max-width:560px){.cols{grid-template-columns:1fr;}}
+
+/* ---------- day timeline ---------- */
+.day-timeline{border:1px solid var(--line); border-radius:4px; background:var(--bg-raised); overflow:hidden;}
+.drow{display:grid; grid-template-columns:78px 1fr; gap:1.1rem; padding:0.95rem 1.4rem; border-top:1px solid var(--line); align-items:baseline;}
+.drow:first-child{border-top:none;}
+.drow .time{font-family:var(--font-mono); font-size:0.82rem; color:var(--sunrise); font-variant-numeric:tabular-nums;}
+.drow .what strong{display:block; font-size:0.93rem; color:var(--ink); font-weight:600; margin-bottom:0.15rem;}
+.drow .what span{font-size:0.85rem; color:var(--ink-soft);}
+@media (max-width:560px){.drow{grid-template-columns:58px 1fr;}}
+
+/* ---------- checklist ---------- */
+.checklist-progress{display:flex; align-items:center; gap:0.7rem; margin-bottom:0.9rem; font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-faint);}
+.checklist-progress .ptrack{flex:1; height:4px; background:var(--accent-soft); border-radius:2px; overflow:hidden;}
+.checklist-progress .pfill{height:100%; width:0%; background:var(--ink); transition:width 0.4s cubic-bezier(.22,1,.36,1);}
+.checklist{border:1px solid var(--line); border-radius:4px; background:var(--bg-raised); overflow:hidden;}
+.crow{
+  display:grid; grid-template-columns:22px 1fr auto; gap:1rem; align-items:center;
+  padding:0.9rem 1.4rem; border-top:1px solid var(--line);
+  width:100%; background:none; border-left:none; border-right:none; border-bottom:none;
+  font:inherit; text-align:left; cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.crow:first-child{border-top:none;}
+.crow .box{
+  width:16px; height:16px; border-radius:4px; border:1.4px solid var(--ink-faint);
+  position:relative; transition:background 0.2s ease, border-color 0.2s ease;
+}
+.crow .box::after{
+  content:'';
+  position:absolute; left:3px; top:-1px; width:4px; height:8px;
+  border:solid #fff; border-width:0 2px 2px 0; transform:rotate(40deg) scale(0);
+  transition:transform 0.2s ease;
+}
+.crow.done .box{background:var(--ink); border-color:var(--ink);}
+.crow.done .box::after{transform:rotate(40deg) scale(1);}
+.crow .name{font-size:0.94rem; color:var(--ink); transition:color 0.2s ease;}
+.crow.done .name{color:var(--ink-faint); text-decoration:line-through; text-decoration-color:var(--ink-faint);}
+.crow .freq{font-family:var(--font-mono); font-size:0.7rem; color:var(--ink-faint); white-space:nowrap;}
+
+footer{margin-top:4.5rem; padding-top:1.7rem; border-top:1px solid var(--line); font-size:0.85rem; color:var(--ink-faint);}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation:none !important; transition:none !important;}
+  .pulse-line{stroke-dashoffset:0 !important;}
+}
+</style>
+
+<div class="scroll-spine" id="scrollSpine"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="shell">
+  <aside class="rail" aria-hidden="true">
+    <span class="mark">Nhịp Ngày Mới</span>
+    <svg class="pulse-rail" viewBox="0 0 22 120" preserveAspectRatio="none">
+      <path d="M11 0 L11 40 L4 50 L18 62 L11 74 L11 120" fill="none" stroke="currentColor" stroke-width="1.2" style="color:var(--accent)"/>
+    </svg>
+    <span class="foot-num">12&nbsp;TUẦN</span>
+  </aside>
+
+  <main>
+    <section class="hero">
+      <span class="hero-ghost" id="heroGhost" aria-hidden="true">0</span>
+      <div class="hero-inner">
+        <p class="eyebrow">Nhật ký tái thiết lập · 12 tuần</p>
+        <h1 class="hero-h1">
+          <span class="line"><span class="line-in">Trở lại nhịp sống <em>kỷ luật</em>,</span></span>
+          <span class="line"><span class="line-in">đúng tốc độ cơ thể</span></span>
+        </h1>
+        <p>Bạn từng xây được nền tảng này một lần — cơ thể vẫn còn giữ ký ức của nó. Hành trình này không bắt đầu từ số 0, mà đi theo đúng nhịp phục hồi thật: giấc ngủ trước, sự sắc bén tinh thần theo sau, vóc dáng đến cuối cùng.</p>
+        <div class="pulse-wrap">
+          <svg viewBox="0 0 700 64" preserveAspectRatio="none">
+            <path class="pulse-line" d="M0 32 L160 32 L184 8 L208 56 L232 20 L256 32 L700 32" />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+
+      <section class="entry" data-num="01">
+        <div class="entry-head"><span class="num">01</span><h2>Các hệ phục hồi không cùng tốc độ</h2></div>
+        <p class="entry-note">Đây là lý do hành trình chia theo giai đoạn, thay vì cố làm mọi thứ ngay tuần đầu.</p>
+        <div class="timeline">
+          <div class="trow"><span class="label">Nhịp ngủ &amp; năng lượng</span><span class="bar-track"><span class="bar-fill" style="--w:22%"></span></span><span class="weeks">2–3 tuần</span></div>
+          <div class="trow"><span class="label">Tập trung &amp; trí nhớ</span><span class="bar-track"><span class="bar-fill" style="--w:45%"></span></span><span class="weeks">4–6 tuần</span></div>
+          <div class="trow"><span class="label">Sức mạnh &amp; cơ bắp</span><span class="bar-track"><span class="bar-fill" style="--w:60%"></span></span><span class="weeks">6–8 tuần</span></div>
+          <div class="trow"><span class="label">Vóc dáng, giảm mỡ</span><span class="bar-track"><span class="bar-fill" style="--w:100%"></span></span><span class="weeks">8–12 tuần</span></div>
+          <div class="timeline-foot">Vì bạn từng có cơ bắp trước đó, sức mạnh thường hồi phục nhanh hơn người xây từ đầu — đừng để cảm giác "quen" khiến bạn tăng cường độ quá nhanh trong 2 tuần đầu.</div>
+        </div>
+      </section>
+
+      <div class="divider"><svg viewBox="0 0 700 20" preserveAspectRatio="none"><path d="M0 10 L300 10 L312 2 L324 18 L336 10 L700 10"/></svg></div>
+
+      <section class="entry" data-num="02">
+        <div class="entry-head"><span class="num">02</span><h2>Ba giai đoạn</h2></div>
+        <p class="entry-note">Mỗi giai đoạn có một mục tiêu duy nhất. Vuốt hoặc bấm chấm để chuyển — đừng cố làm giai đoạn 3 khi còn đang ở giai đoạn 1.</p>
+
+        <div class="phase-track" id="phaseTrack">
+          <div class="phase">
+            <div class="phase-head"><h3>Tái lập nhịp</h3><span class="weeks-tag">TUẦN 1–3</span></div>
+            <p class="phase-goal">Mục tiêu duy nhất: giờ ngủ và giờ thức cố định mỗi ngày, kể cả cuối tuần.</p>
+            <div class="phase-body">
+              <div class="item"><span class="dot"></span><div class="txt"><strong>Giờ ngủ – giờ dậy cố định</strong><span>Sai lệch không quá 30 phút mỗi ngày, kể cả khi mất ngủ — vẫn dậy đúng giờ.</span></div></div>
+              <div class="item"><span class="dot"></span><div class="txt"><strong>Ánh sáng buổi sáng</strong><span>10–15 phút ra ngoài trời trong vòng 1 giờ sau khi dậy.</span></div></div>
+              <div class="item"><span class="dot"></span><div class="txt"><strong>Vận động nhẹ</strong><span>Đi bộ nhanh hoặc cường độ thấp 20–30 phút, 4–5 lần/tuần.</span></div></div>
+              <div class="item"><span class="dot"></span><div class="txt"><strong>Bữa ăn đều giờ</strong><span>Cố định 3 khung giờ ăn, ưu tiên đủ protein hơn là kiêng khem chặt.</span></div></div>
+              <div class="watch"><span class="tag">Lưu ý</span><span>2 tuần đầu thường khó chịu nhất — mệt mỏi hơn dự kiến trước khi thấy lợi ích. Đây là tái thích nghi bình thường.</span></div>
+            </div>
+          </div>
+
+          <div class="phase">
+            <div class="phase-head"><h3>Xây dựng</h3><span class="weeks-tag">TUẦN 4–6</span></div>
+            <p class="phase-goal">Mục tiêu duy nhất: đưa cường độ tập luyện lên mức thật, giữ nguyên nền nhịp sinh học đã ổn định.</p>
+            <div class="phase-body">
+              <div class="item"><span class="dot"></span><div class="txt"><strong>Tập kháng lực có cấu trúc</strong><span>3–4 buổi/tuần, tăng khối lượng khoảng 5–10% mỗi tuần.</span></div></div>
+              <div class="item"><span class="dot"></span><div class="txt"><strong>Giấc ngủ sâu là ưu tiên</strong><span>Tắt màn hình trước ngủ 45–60 phút — não bộ củng cố trí nhớ ở giai đoạn này.</span></div></div>
+              <div class="item"><span class="dot"></span><div class="txt"><strong>Siết lại dinh dưỡng</strong><span>Bắt đầu tính calo/macro nếu mục tiêu là giảm mỡ.</span></div></div>
+              <div class="item"><span class="dot"></span><div class="txt"><strong>Phiên làm việc sâu</strong><span>45–90 phút không gián đoạn — khả năng chú ý bắt đầu kéo dài trở lại.</span></div></div>
+            </div>
+          </div>
+
+          <div class="phase">
+            <div class="phase-head"><h3>Ổn định</h3><span class="weeks-tag">TUẦN 7–12</span></div>
+            <p class="phase-goal">Mục tiêu duy nhất: biến nếp sống thành mặc định, không cần ý chí để duy trì.</p>
+            <div class="phase-body">
+              <div class="item"><span class="dot"></span><div class="txt"><strong>Đánh giá lại mỗi 2 tuần</strong><span>Số đo, ảnh, chỉ số tập — điều chỉnh thay vì đoán mò.</span></div></div>
+              <div class="item"><span class="dot"></span><div class="txt"><strong>Thêm một biến số mới</strong><span>Môn thể thao mới, kỹ năng, hoặc mục tiêu xã hội gắn với nếp sống.</span></div></div>
+              <div class="item"><span class="dot"></span><div class="txt"><strong>Chuẩn bị cho gián đoạn</strong><span>Lên kế hoạch trước cho du lịch, ốm, deadline.</span></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="phase-dots" id="phaseDots">
+          <button class="pdot active" data-i="0" aria-label="Giai đoạn 1"></button>
+          <button class="pdot" data-i="1" aria-label="Giai đoạn 2"></button>
+          <button class="pdot" data-i="2" aria-label="Giai đoạn 3"></button>
+        </div>
+      </section>
+
+      <div class="divider"><svg viewBox="0 0 700 20" preserveAspectRatio="none"><path d="M0 10 L300 10 L312 2 L324 18 L336 10 L700 10"/></svg></div>
+
+      <section class="entry" data-num="03">
+        <div class="entry-head"><span class="num">03</span><h2>Bản đồ 12 tuần</h2></div>
+        <p class="entry-note">Mỗi ô là một tuần. Màu đậm dần theo cường độ và độ ổn định.</p>
+        <div class="grid-weeks">
+          <div class="wk p1">1</div><div class="wk p1">2</div><div class="wk p1">3</div>
+          <div class="wk p2">4</div><div class="wk p2">5</div><div class="wk p2">6</div>
+          <div class="wk p3">7</div><div class="wk p3">8</div><div class="wk p3">9</div>
+          <div class="wk p3">10</div><div class="wk p3">11</div><div class="wk p3">12</div>
+        </div>
+        <div class="legend">
+          <span class="sw"><i style="background:var(--accent-soft)"></i>Tái lập nhịp</span>
+          <span class="sw"><i style="background:color-mix(in srgb, var(--ink) 22%, var(--accent-soft))"></i>Xây dựng</span>
+          <span class="sw"><i style="background:var(--ink)"></i>Ổn định</span>
+        </div>
+      </section>
+
+      <div class="divider"><svg viewBox="0 0 700 20" preserveAspectRatio="none"><path d="M0 10 L300 10 L312 2 L324 18 L336 10 L700 10"/></svg></div>
+
+      <section class="entry" data-num="04">
+        <div class="entry-head"><span class="num">04</span><h2>Đồ uống trong ngày</h2></div>
+        <p class="entry-note">Đường lỏng là điểm rò rỉ lớn nhất — cắt ở đây trước khi siết bất kỳ chỗ nào khác.</p>
+        <div class="cols">
+          <div class="col cut">
+            <div class="col-head">Loại bỏ</div>
+            <ul>
+              <li><strong>Cà phê + sữa đặc</strong><span>15–20g đường/ly, gây tụt năng lượng giữa buổi</span></li>
+              <li><strong>Nước ngọt có ga</strong><span>Coca, Pepsi, trà chanh đóng chai</span></li>
+              <li><strong>Trà sữa, cà phê xay syrup</strong><span>300–500 calo/ly</span></li>
+              <li><strong>Nước tăng lực</strong><span>Đường cao + caffeine không kiểm soát liều</span></li>
+              <li><strong>Rượu bia thường xuyên</strong><span>Phá giấc ngủ sâu, cản phục hồi cơ</span></li>
+              <li><strong>Nước ép đóng hộp</strong><span>Tác động đường huyết gần giống nước ngọt</span></li>
+            </ul>
+          </div>
+          <div class="col add">
+            <div class="col-head">Thêm vào</div>
+            <ul>
+              <li><strong>Nước lọc</strong><span>2–2.5 lít/ngày</span><br><span class="when">Cả ngày</span></li>
+              <li><strong>Cà phê phin nguyên chất</strong><span>Tỉnh táo ổn định, không tụt đường huyết</span><br><span class="when">9h–14h</span></li>
+              <li><strong>Trà xanh không đường</strong><span>Tỉnh táo nhẹ, ít caffeine hơn</span><br><span class="when">14h–16h</span></li>
+              <li><strong>Nước điện giải</strong><span>Sau buổi tập cường độ cao</span><br><span class="when">Sau khi tập</span></li>
+              <li><strong>Nước chanh/sả loãng</strong><span>Hỗ trợ tiêu hóa</span><br><span class="when">Sáng sớm</span></li>
+              <li><strong>Trà thảo mộc</strong><span>Hoa cúc, bạc hà — không phá giấc ngủ</span><br><span class="when">Sau 18h</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="entry" data-num="05">
+        <div class="entry-head"><span class="num">05</span><h2>Thực phẩm hàng ngày</h2></div>
+        <p class="entry-note">Bỏ chế biến sẵn nhiều đường/dầu tinh luyện, thêm thực phẩm nguyên chất giàu protein và chất xơ.</p>
+        <div class="cols">
+          <div class="col cut">
+            <div class="col-head">Loại bỏ</div>
+            <ul>
+              <li><strong>Đồ chiên rán, fastfood</strong><span>Dầu tinh luyện tái sử dụng, viêm mãn tính</span></li>
+              <li><strong>Bánh kẹo đóng gói</strong><span>Đường tinh luyện cao, không no lâu</span></li>
+              <li><strong>Tinh bột quá no buổi tối</strong><span>Tăng đường huyết khi ít vận động sau đó</span></li>
+              <li><strong>Đồ chế biến sẵn, đóng hộp</strong><span>Xúc xích, mì ăn liền — nhiều natri</span></li>
+              <li><strong>Sốt/gia vị nhiều đường</strong><span>Tương ớt, mayonnaise công nghiệp</span></li>
+              <li><strong>Ăn vặt sau 21h</strong><span>Ảnh hưởng tiêu hóa và giấc ngủ sâu</span></li>
+            </ul>
+          </div>
+          <div class="col add">
+            <div class="col-head">Thêm vào</div>
+            <ul>
+              <li><strong>Trứng, ức gà, cá, đậu phụ</strong><span>Protein nạc mỗi bữa</span><br><span class="when">Cả 3 bữa chính</span></li>
+              <li><strong>Rau xanh, rau củ đa màu</strong><span>Ít nhất 2 khẩu phần/bữa chính</span><br><span class="when">Trưa &amp; tối</span></li>
+              <li><strong>Tinh bột nguyên cám</strong><span>Gạo lứt, yến mạch, khoai lang</span><br><span class="when">Sáng &amp; trưa</span></li>
+              <li><strong>Trái cây nguyên miếng</strong><span>Thay đồ ngọt khi thèm vị ngọt</span><br><span class="when">Giữa buổi, trước tập</span></li>
+              <li><strong>Chất béo tốt</strong><span>Dầu ô liu, bơ, hạt (một nắm nhỏ)</span><br><span class="when">Trưa &amp; tối</span></li>
+              <li><strong>Sữa chua không đường</strong><span>Hỗ trợ tiêu hóa</span><br><span class="when">Sáng hoặc giữa buổi</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"><svg viewBox="0 0 700 20" preserveAspectRatio="none"><path d="M0 10 L300 10 L312 2 L324 18 L336 10 L700 10"/></svg></div>
+
+      <section class="entry" data-num="06">
+        <div class="entry-head"><span class="num">06</span><h2>Khung giờ ăn trong ngày</h2></div>
+        <p class="entry-note">3 bữa chính cố định giờ, cộng bữa phụ quanh giờ tập nếu cần.</p>
+        <div class="day-timeline">
+          <div class="drow"><span class="time">7:00</span><div class="what"><strong>Bữa sáng</strong><span>Protein + tinh bột nguyên cám.</span></div></div>
+          <div class="drow"><span class="time">12:00</span><div class="what"><strong>Bữa trưa</strong><span>Bữa no nhất trong ngày — đủ protein, rau, tinh bột vừa phải.</span></div></div>
+          <div class="drow"><span class="time">15:30</span><div class="what"><strong>Bữa phụ (nếu đói)</strong><span>Trái cây, sữa chua không đường, hoặc một nắm hạt.</span></div></div>
+          <div class="drow"><span class="time">18:15</span><div class="what"><strong>Ăn nhẹ trước tập</strong><span>Chỉ khi bữa trưa đã cách hơn 5 tiếng.</span></div></div>
+          <div class="drow"><span class="time">20:00</span><div class="what"><strong>Bữa tối</strong><span>Ưu tiên protein và rau, giảm tinh bột so với bữa trưa.</span></div></div>
+          <div class="drow"><span class="time">21:00</span><div class="what"><strong>Ngừng ăn</strong><span>Để dạ dày kịp tiêu hóa trước khi ngủ.</span></div></div>
+        </div>
+      </section>
+
+      <section class="entry" data-num="07">
+        <div class="entry-head"><span class="num">07</span><h2>Lịch tối điển hình</h2></div>
+        <p class="entry-note">Tan làm 18h, về nhà 19h — chạy/đi bộ trước bữa tối.</p>
+        <div class="day-timeline">
+          <div class="drow"><span class="time">18:00</span><div class="what"><strong>Tan làm</strong><span>Ăn nhẹ nếu đói — không bắt buộc.</span></div></div>
+          <div class="drow"><span class="time">19:00</span><div class="what"><strong>Về đến nhà</strong><span>300–400ml nước lọc, thay đồ.</span></div></div>
+          <div class="drow"><span class="time">19:15</span><div class="what"><strong>Chạy/đi bộ luân phiên 3–3 phút</strong><span>15–20 phút cho buổi đầu tiên.</span></div></div>
+          <div class="drow"><span class="time">19:40</span><div class="what"><strong>Hạ nhiệt</strong><span>Uống nước bù, giãn cơ nhẹ 5 phút.</span></div></div>
+          <div class="drow"><span class="time">20:00</span><div class="what"><strong>Ăn tối</strong><span>Cửa sổ phục hồi cơ tốt nhất — ưu tiên protein.</span></div></div>
+          <div class="drow"><span class="time">22:00</span><div class="what"><strong>Tắt màn hình</strong><span>45–60 phút trước giờ ngủ.</span></div></div>
+        </div>
+      </section>
+
+      <div class="divider"><svg viewBox="0 0 700 20" preserveAspectRatio="none"><path d="M0 10 L300 10 L312 2 L324 18 L336 10 L700 10"/></svg></div>
+
+      <section class="entry" data-num="08">
+        <div class="entry-head"><span class="num">08</span><h2>Việc theo dõi</h2></div>
+        <p class="entry-note">Giữ danh sách ngắn — nhiều chỉ số hơn thường nghĩa là bỏ cuộc sớm hơn. Bấm để đánh dấu đã làm hôm nay.</p>
+        <div class="checklist-progress">
+          <span id="checklistCount">0/5</span>
+          <span class="ptrack"><span class="pfill" id="checklistFill"></span></span>
+        </div>
+        <div class="checklist" id="checklistBox">
+          <button type="button" class="crow"><span class="box"></span><span class="name">Giờ ngủ – giờ dậy</span><span class="freq">HÀNG NGÀY</span></button>
+          <button type="button" class="crow"><span class="box"></span><span class="name">Buổi tập (loại + thời lượng)</span><span class="freq">HÀNG NGÀY</span></button>
+          <button type="button" class="crow"><span class="box"></span><span class="name">Cân nặng buổi sáng</span><span class="freq">2–3 LẦN/TUẦN</span></button>
+          <button type="button" class="crow"><span class="box"></span><span class="name">Ảnh chụp vóc dáng</span><span class="freq">MỖI 2 TUẦN</span></button>
+          <button type="button" class="crow"><span class="box"></span><span class="name">Năng lượng &amp; tập trung (1–10)</span><span class="freq">CUỐI TUẦN</span></button>
+        </div>
+      </section>
+
+      <footer>Hành trình được xây dựa trên tốc độ phục hồi sinh lý thông thường và nền tảng thói quen bạn từng có — mức độ cụ thể có thể khác tuỳ cơ địa. Điều chỉnh theo phản hồi thật của cơ thể thay vì bám cứng vào lịch.</footer>
+
+    </div>
+  </main>
+</div>
+
+<script>
+if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches && 'IntersectionObserver' in window) {
+  var targets = document.querySelectorAll('.entry');
+  targets.forEach(function (el) { el.classList.add('reveal'); });
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('reveal-in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  targets.forEach(function (el) { io.observe(el); });
+}
+
+(function () {
+  var spine = document.getElementById('scrollSpine');
+  if (!spine) return;
+  var reduceMotion = !window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+  function update() {
+    var h = document.documentElement;
+    var scrolled = h.scrollTop;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (scrolled / max) * 100 : 0;
+    spine.style.width = pct + '%';
+  }
+  update();
+  window.addEventListener('scroll', function () {
+    if (reduceMotion) { update(); return; }
+    window.requestAnimationFrame(update);
+  }, { passive: true });
+  window.addEventListener('resize', update);
+})();
+
+var reduceMotion = !window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+
+if (!reduceMotion && 'IntersectionObserver' in window) {
+  var fillTargets = document.querySelectorAll('.timeline, .grid-weeks');
+  var fillIo = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        fillIo.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.35 });
+  fillTargets.forEach(function (el) { fillIo.observe(el); });
+} else {
+  document.querySelectorAll('.timeline, .grid-weeks').forEach(function (el) { el.classList.add('in-view'); });
+}
+
+if (!reduceMotion) {
+  var ghost = document.querySelector('.hero-ghost');
+  if (ghost) {
+    window.addEventListener('scroll', function () {
+      window.requestAnimationFrame(function () {
+        var offset = Math.min(window.scrollY, 600) * 0.18;
+        ghost.style.transform = 'translateY(' + offset + 'px)';
+      });
+    }, { passive: true });
+  }
+}
+
+if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.querySelectorAll('.col, .day-timeline, .checklist').forEach(function (card) {
+    card.addEventListener('mousemove', function (e) {
+      var r = card.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - 0.5;
+      var y = (e.clientY - r.top) / r.height - 0.5;
+      card.style.transform = 'perspective(700px) rotateX(' + (y * -3.5) + 'deg) rotateY(' + (x * 3.5) + 'deg) translateZ(4px)';
+    });
+    card.addEventListener('mouseleave', function () {
+      card.style.transform = '';
+    });
+  });
+}
+
+/* interactive checklist */
+(function () {
+  var box = document.getElementById('checklistBox');
+  if (!box) return;
+  var rows = box.querySelectorAll('.crow');
+  var countEl = document.getElementById('checklistCount');
+  var fillEl = document.getElementById('checklistFill');
+  function refresh() {
+    var done = box.querySelectorAll('.crow.done').length;
+    countEl.textContent = done + '/' + rows.length;
+    fillEl.style.width = (done / rows.length * 100) + '%';
+  }
+  rows.forEach(function (row) {
+    row.addEventListener('click', function () {
+      row.classList.toggle('done');
+      refresh();
+    });
+  });
+  refresh();
+})();
+
+/* phase slide track + dots */
+(function () {
+  var track = document.getElementById('phaseTrack');
+  var dots = document.querySelectorAll('#phaseDots .pdot');
+  if (!track || !dots.length) return;
+  var cards = track.querySelectorAll('.phase');
+  dots.forEach(function (dot) {
+    dot.addEventListener('click', function () {
+      var i = parseInt(dot.getAttribute('data-i'), 10);
+      var card = cards[i];
+      if (card) track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  });
+  var ticking = false;
+  track.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function () {
+      var center = track.scrollLeft + track.clientWidth / 2;
+      var closest = 0, closestDist = Infinity;
+      cards.forEach(function (card, i) {
+        var mid = card.offsetLeft - track.offsetLeft + card.offsetWidth / 2;
+        var d = Math.abs(mid - center);
+        if (d < closestDist) { closestDist = d; closest = i; }
+      });
+      dots.forEach(function (d, i) { d.classList.toggle('active', i === closest); });
+      ticking = false;
+    });
+  }, { passive: true });
+})();
+
+/* count-up hero number */
+(function () {
+  var el = document.getElementById('heroGhost');
+  if (!el) return;
+  if (reduceMotion) { el.textContent = '12'; return; }
+  var start = null;
+  var duration = 1400;
+  function step(ts) {
+    if (start === null) start = ts;
+    var p = Math.min((ts - start) / duration, 1);
+    var eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(eased * 12);
+    if (p < 1) window.requestAnimationFrame(step);
+  }
+  window.requestAnimationFrame(step);
+})();
+
+/* custom cursor */
+if (!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  var ring = document.getElementById('cursorRing');
+  var dot = document.getElementById('cursorDot');
+  if (ring && dot) {
+    document.body.classList.add('has-custom-cursor');
+    var rx = 0, ry = 0, mx = 0, my = 0;
+    window.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px';
+      dot.style.top = my + 'px';
+    });
+    function loop() {
+      rx += (mx - rx) * 0.18;
+      ry += (my - ry) * 0.18;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      window.requestAnimationFrame(loop);
+    }
+    window.requestAnimationFrame(loop);
+    document.querySelectorAll('.col, .day-timeline, .checklist, .phase, a').forEach(function (el) {
+      el.addEventListener('mouseenter', function () { ring.classList.add('hover'); });
+      el.addEventListener('mouseleave', function () { ring.classList.remove('hover'); });
+    });
+  }
+}
+</script>
